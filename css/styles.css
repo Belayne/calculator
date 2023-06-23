@@ -1,5 +1,6 @@
 html {
     box-sizing: border-box;
+    font-family: sans-serif;
 }
 
 * {
@@ -15,24 +16,6 @@ body {
     height: 70vh;
 }
 
-input[type="number"] {
-    border: none;
-    text-align: right;
-    flex: 1;
-    border: 1px solid black;
-    padding: 10px;
-    margin-bottom: 5px;
-}
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-    
-
 .calculator {
     display: flex;
     flex-wrap: wrap;
@@ -43,9 +26,17 @@ input::-webkit-inner-spin-button {
     padding: 10px;
 }
 
+.display {
+    text-align: right;
+    flex: 1;
+    border: 1px solid black;
+    padding: 10px;
+    margin-bottom: 5px;
+}
 
 
-.misc {
+
+.operators {
     display: flex;
     justify-content: space-evenly;
     gap: 5px;
@@ -54,7 +45,7 @@ input::-webkit-inner-spin-button {
 }
 
 
-.operators {
+.misc {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -75,3 +66,13 @@ button {
     width: 50px;
     height: 50px;
 }
+
+.number[data-value="0"] {
+    flex: 1;
+}
+
+.numbers, .operators, .misc {
+    padding: 5px 2px;
+}
+
+

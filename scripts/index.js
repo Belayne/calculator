@@ -1,7 +1,13 @@
 
-let firstNum;
-let secondNum;
-let operator;
+let currentNum = "";
+let isOperating = false;
+let operator = "";
+
+const buttonsDiv = document.querySelector('.numbers');
+buttonsDiv.addEventListener('click', updateNum);
+
+const display = document.querySelector('.display');
+
 
 const add = (a, b) => a + b;
 
@@ -31,4 +37,15 @@ const operate = (a, b, operator) => {
         case "power": return power(a, b);
     }
     return "Error";
+}
+
+function updateNum(e) {
+    let clickedNum = e.target.getAttribute("data-value");
+    currentNum = (currentNum.length < 10)? currentNum + clickedNum: currentNum;
+    console.log(currentNum);
+    displayNum(currentNum)
+}
+
+function displayNum(num) {
+    display.textContent = num;
 }
