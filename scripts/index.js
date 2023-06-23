@@ -8,6 +8,8 @@ buttonsDiv.addEventListener('click', updateNum);
 
 const display = document.querySelector('.display');
 
+const operators = document.querySelector(".operators");
+
 
 const add = (a, b) => a + b;
 
@@ -41,8 +43,19 @@ const operate = (a, b, operator) => {
 
 function updateNum(e) {
     let clickedNum = e.target.getAttribute("data-value");
-    currentNum = (currentNum.length < 10)? currentNum + clickedNum: currentNum;
-    console.log(currentNum);
+    if(clickedNum == ".") {
+        if(!currentNum) {
+            currentNum = "0."
+        } else if (!currentNum.includes(".") && currentNum.length < 10) {
+            currentNum = currentNum + ".";
+        }
+    }
+
+    else {
+        if(!currentNum && clickedNum == "0") currentNum = 0;
+        
+        else if(currentNum.length < 10) currentNum = currentNum + clickedNum;
+    }
     displayNum(currentNum)
 }
 
