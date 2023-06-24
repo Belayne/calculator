@@ -1,12 +1,19 @@
 
+let firstNum;
+let secondNum;
+let result = "";
+let expression = "";
 let currentNum = "";
 let isOperating = false;
 let operator = "";
 
-const buttonsDiv = document.querySelector('.numbers');
-buttonsDiv.addEventListener('click', updateNum);
+const numBtns = document.querySelectorAll('.number');
+const dotBtn = document.querySelector('.dot');
+numBtns.forEach(btn => btn.addEventListener("click", updateNum));
+dotBtn.addEventListener("click", updateNum);
 
-const display = document.querySelector('.display');
+const currentSpan = document.querySelector('.current');
+const previousSpan = document.querySelector('.previous');
 
 const operators = document.querySelector(".operators");
 
@@ -30,20 +37,20 @@ const formatDivide = (result) => {
     return formattedRes;
 }
 
-const operate = (a, b, operator) => {
+const operate = (a, b) => {
     switch(operator) {
         case "add": return add(a, b);
         case "subtract": return subtract(a, b);
-        case "divide": return divde(a, b);
+        case "divide": return divide(a, b);
         case "multiply": return multiply(a, b);
         case "power": return power(a, b);
     }
     return "Error";
 }
 
-function updateNum(e) {
-    let clickedNum = e.target.getAttribute("data-value");
-    if(clickedNum == ".") {
+function updateNum() {
+    let clicked = this.getAttribute("data-value");
+    if(clicked == ".") {
         if(!currentNum) {
             currentNum = "0."
         } else if (!currentNum.includes(".") && currentNum.length < 10) {
@@ -52,13 +59,13 @@ function updateNum(e) {
     }
 
     else {
-        if(!currentNum && clickedNum == "0") currentNum = 0;
-        
-        else if(currentNum.length < 10) currentNum = currentNum + clickedNum;
+        if(!currentNum && clicked == "0") currentNum = 0;
+        else if(currentNum.length < 10) currentNum = currentNum + clicked;
     }
     displayNum(currentNum)
 }
 
-function displayNum(num) {
-    display.textContent = num;
+function displayNum() {
+    currentSpan.textContent = currentNum;
 }
+
