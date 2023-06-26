@@ -1,3 +1,7 @@
+:root {
+    --calculator-width: 250px;
+}
+
 html {
     box-sizing: border-box;
     font-family: sans-serif;
@@ -22,7 +26,7 @@ body {
     align-items: center;
     justify-content: space-evenly;
     border: 1px solid black;
-    width: 250px;
+    width: var(--calculator-width);
     padding: 10px;
 }
 
@@ -92,8 +96,8 @@ body {
 }
 
 button {
-    width: 50px;
-    height: 50px;
+    width: calc(var(--calculator-width)/5);
+    height: calc(var(--calculator-width)/5);
 }
 
 .numbers, .operators, .misc {
