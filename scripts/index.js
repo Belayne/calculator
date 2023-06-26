@@ -5,7 +5,7 @@ let currentNum = "";
 let operator = "";
 let expression = "";
 let selectingOp = false;
-let endExp = false;
+let zeroDivision = false;
 
 const numBtns = document.querySelectorAll('.number');
 const dotBtn = document.querySelector('.dot');
@@ -44,7 +44,11 @@ const multiply = (a, b) => a * b;
 const power = (a, b) => a ** b;
 
 const divide = (a, b) => {
-    if(b == 0) return "Ayo you can't do that";
+    if(b == 0) {
+        zeroDivision = true;
+        if(a == 0) return "Undefined"
+        else return "You can't divide by zero"
+    }
     let result = a / b;
     return formatDivide(result);
 }
@@ -66,11 +70,17 @@ const operate = (a, b) => {
 }
 
 function updateNum() {
-    let clicked = this.getAttribute("data-value");
-    if(!currentNum && clicked == "0") currentNum = 0;
-    else if(currentNum.length < 10) currentNum = currentNum + clicked;    
-    selectingOp = false;
-    displayNum()
+    if(zeroDivision) {
+        clear();
+        zeroDivision = false;
+    }
+    else {
+        let clicked = this.getAttribute("data-value");
+        if(!currentNum && clicked == "0") currentNum = 0;
+        else if(currentNum.length < 10) currentNum = currentNum + clicked;    
+        selectingOp = false;
+        displayNum()
+    }
 }
 
 function makeDecimal() {
@@ -88,24 +98,30 @@ function displayNum() {
 
 
 function setOperator() {
-    if(selectingOp) {
-        expression = expression.replace(/[^\s]+$/, "");
-        operator = this.getAttribute("data-value")
-        updateExp(this.textContent);
+    if(zeroDivision) {
+        clear();
+        zeroDivision = false;
     }
     else {
-        updateExp(this.textContent)
-        if(firstNum != null) {
-            calculate();
+        if(selectingOp) {
+            expression = expression.replace(/[^\s]+$/, "");
             operator = this.getAttribute("data-value")
+            updateExp(this.textContent);
         }
         else {
-            firstNum = +currentNum;
-            currentNum = "";
-            operator = this.getAttribute("data-value")
+            updateExp(this.textContent)
+            if(firstNum != null) {
+                calculate();
+                operator = this.getAttribute("data-value")
+            }
+            else {
+                firstNum = +currentNum;
+                currentNum = "";
+                operator = this.getAttribute("data-value")
+            }
         }
+        selectingOp = true;
     }
-    selectingOp = true;
 }
 
 function calculate() {
@@ -133,7 +149,7 @@ function clear() {
     secondNum = null;
     operator = null;
     displayExp();
-    displayNum();
+    currentSpan.textContent = 0;
 }
 
 function back() {
@@ -148,11 +164,9 @@ function sign() {
 }
 
 function equals() {
-    if(!selectingOp){
-        if(firstNum != null && !selectingOp) {
-            updateExp("=")
-            calculate();
-        }
+    if(firstNum != null && !selectingOp) {
+        updateExp("=")
+        calculate();
     }
     selectingOp = true;
 }
