@@ -89,7 +89,7 @@ function displayNum() {
 
 function setOperator() {
     if(selectingOp) {
-        expression = expression.slice(0, expression.length - 1)
+        expression = expression.replace(/[^\s]+$/, "");
         operator = this.getAttribute("data-value")
         updateExp(this.textContent);
     }
@@ -102,7 +102,6 @@ function setOperator() {
         else {
             firstNum = +currentNum;
             currentNum = "";
-            
             operator = this.getAttribute("data-value")
         }
     }
@@ -118,7 +117,7 @@ function calculate() {
     currentNum = "";
 }
 
-function updateExp(expOperator = "=") {
+function updateExp(expOperator) {
     expression = expression + " " + currentNum + " " + expOperator
     displayExp();
 }
@@ -151,7 +150,7 @@ function sign() {
 function equals() {
     if(!selectingOp){
         if(firstNum != null && !selectingOp) {
-            updateExp()
+            updateExp("=")
             calculate();
         }
     }
