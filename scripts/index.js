@@ -2,7 +2,7 @@
 let firstNum = null;
 let secondNum = null;
 let currentNum = "";
-let operator = "";
+let operator = null;
 let expression = "";
 let selectingOp = false;
 let zeroDivision = false;
@@ -164,10 +164,12 @@ function sign() {
 }
 
 function equals() {
-    if(firstNum != null && !selectingOp) {
-        updateExp("=")
-        calculate();
+    if(operator != null){
+        if(firstNum != null && !selectingOp) {
+            updateExp("=")
+            calculate();
+        }
+        selectingOp = true;
     }
-    selectingOp = true;
 }
 
