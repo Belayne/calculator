@@ -1,21 +1,38 @@
 
-let firstNum;
-let secondNum;
-let result = "";
-let expression = "";
+let firstNum = null;
+let secondNum = null;
 let currentNum = "";
-let isOperating = false;
 let operator = "";
+let expression = "";
+let selectingOp = false;
+let endExp = false;
 
 const numBtns = document.querySelectorAll('.number');
 const dotBtn = document.querySelector('.dot');
 numBtns.forEach(btn => btn.addEventListener("click", updateNum));
-dotBtn.addEventListener("click", updateNum);
+dotBtn.addEventListener("click", makeDecimal);
 
 const currentSpan = document.querySelector('.current');
-const previousSpan = document.querySelector('.previous');
+const expressionSpan = document.querySelector('.expression');
 
-const operators = document.querySelector(".operators");
+const opBtns = document.querySelectorAll(".operator");
+opBtns.forEach(btn => btn.addEventListener("click", setOperator))
+
+const powerBtn = document.querySelector('button[data-value="power"]');
+powerBtn.addEventListener("click", setOperator);
+
+const clearBtn = document.querySelector('button[data-value = "clear"]');
+clearBtn.addEventListener("click", clear);
+
+const backBtn = document.querySelector('button[data-value = "back"]');
+backBtn.addEventListener("click", back);
+
+const signBtn = document.querySelector('button[data-value = "sign"]')
+signBtn.addEventListener('click', sign);
+
+const equalsBtn = document.querySelector('button[data-value = "equals"]')
+equalsBtn.addEventListener('click', equals)
+
 
 
 const add = (a, b) => a + b;
@@ -50,22 +67,94 @@ const operate = (a, b) => {
 
 function updateNum() {
     let clicked = this.getAttribute("data-value");
-    if(clicked == ".") {
-        if(!currentNum) {
-            currentNum = "0."
-        } else if (!currentNum.includes(".") && currentNum.length < 10) {
-            currentNum = currentNum + ".";
-        }
-    }
+    if(!currentNum && clicked == "0") currentNum = 0;
+    else if(currentNum.length < 10) currentNum = currentNum + clicked;    
+    selectingOp = false;
+    displayNum()
+}
 
-    else {
-        if(!currentNum && clicked == "0") currentNum = 0;
-        else if(currentNum.length < 10) currentNum = currentNum + clicked;
+function makeDecimal() {
+    if(!currentNum) {
+        currentNum = "0."
+    } else if (!currentNum.includes(".") && currentNum.length < 10) {
+        currentNum = currentNum + ".";
     }
-    displayNum(currentNum)
+    displayNum()
 }
 
 function displayNum() {
     currentSpan.textContent = currentNum;
+}
+
+
+function setOperator() {
+    if(selectingOp) {
+        expression = expression.slice(0, expression.length - 1)
+        operator = this.getAttribute("data-value")
+        updateExp(this.textContent);
+    }
+    else {
+        updateExp(this.textContent)
+        if(firstNum != null) {
+            calculate();
+            operator = this.getAttribute("data-value")
+        }
+        else {
+            firstNum = +currentNum;
+            currentNum = "";
+            
+            operator = this.getAttribute("data-value")
+        }
+    }
+    selectingOp = true;
+}
+
+function calculate() {
+    secondNum = +currentNum;
+    result = operate(firstNum, secondNum);
+    currentNum = result;
+    firstNum = result;
+    displayNum();
+    currentNum = "";
+}
+
+function updateExp(expOperator = "=") {
+    expression = expression + " " + currentNum + " " + expOperator
+    displayExp();
+}
+
+function displayExp() {
+    expressionSpan.textContent = expression;
+}
+
+function clear() {
+    expression = "";
+    currentNum = "";
+    firstNum = null;
+    secondNum = null;
+    operator = null;
+    displayExp();
+    displayNum();
+}
+
+function back() {
+    if(currentNum.length > 1) currentNum = currentNum.slice(0, currentNum.length - 1)
+    else currentNum = 0;
+    displayNum();
+}
+
+function sign() {
+    currentNum = -(+currentNum)
+    displayNum();
+}
+
+function equals() {
+    if(!selectingOp){
+        if(firstNum != null && !selectingOp) {
+            updateExp()
+            calculate();
+        }
+    }
+    selectingOp = true;
 }
 
